@@ -1,0 +1,11 @@
+name: NonKeepNightChance
+author: Claus (original dev of WorldTimeRule), HSGamer (Re-coder)
+version: 1.0
+depend: [MagicTitles]
+main: com.gmail.themasterclaus.WTR.main
+commands:
+ nonkeepnightchance:
+  usage: /<command>
+  descripsion: Reload
+  permission: nknc.reload
+  aliases: [nknc, nkncreload, nonkeepnightchancereload]
