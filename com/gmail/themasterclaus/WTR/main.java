@@ -90,6 +90,7 @@ public class main extends JavaPlugin
                     main.this.isnight = false;
                     main.this.world.setGameRuleValue("keepInventory", "true");
                     for (final Player p : main.this.world.getPlayers()) {
+                        Bukkit.getConsoleSender().sendMessage(main.this.messageday.replace("&", "§"));
                         p.sendMessage(main.this.messageday.replace("&", "§"));
                         titleskeepday.send(p);
                     }
@@ -100,6 +101,7 @@ public class main extends JavaPlugin
                         main.this.isnight = true;
                         main.this.world.setGameRuleValue("keepInventory", "false");
                         for (final Player p2 : main.this.world.getPlayers()) {
+                            Bukkit.getConsoleSender().sendMessage(main.this.messagenight.replace("&", "§"));
                             p2.sendMessage(main.this.messagenight.replace("&", "§"));
                             titlesnonkeep.send(p2);
                             actionbarnonkeep.send(p2);
@@ -109,6 +111,7 @@ public class main extends JavaPlugin
                         main.this.isnight = true;
                         main.this.world.setGameRuleValue("keepInventory", "true");
                         for (final Player p2 : main.this.world.getPlayers()) {
+                            Bukkit.getConsoleSender().sendMessage(main.this.messagekeepnight.replace("&", "§"));
                             p2.sendMessage(main.this.messagekeepnight.replace("&", "§"));
                             titleskeepnight.send(p2);
                             actionbarkeep.send(p2);
