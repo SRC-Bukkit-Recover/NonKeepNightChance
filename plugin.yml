@@ -2,7 +2,7 @@ name: NonKeepNightChance
 author: HSGamer
 version: 1.0
 main: me.HSGamer.NKNC.NKNC
-softdepand: [DeathDropsAPI]
+softdepend: [DeathDropsAPI]
 commands:
  nonkeepnightchance:
   usage: /<command>

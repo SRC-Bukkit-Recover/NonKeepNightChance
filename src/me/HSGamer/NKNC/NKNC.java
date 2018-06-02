@@ -5,17 +5,17 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.HSGamer.NKNC.listeners.DeathDropsAPIEvent;
-import me.HSGamer.NKNC.task.DeathDropsAPIHook;
-import me.HSGamer.NKNC.task.Default;
+import net.minefs.DeathDropsAPI.PlayerDeathDropEvent;
 
 public class NKNC extends JavaPlugin {
 
-	public List<World> world;
+	public List<String> world;
 	public boolean isNight;
 	public boolean isKeep;
 	public BukkitRunnable runnable;
@@ -28,10 +28,7 @@ public class NKNC extends JavaPlugin {
 		
 		saveDefaultConfig();
 		
-		for (String a : this.getConfig().getStringList("world")) {
-			world.add(this.getServer().getWorld(a));
-		}
-		
+		world = this.getConfig().getStringList("world");
 		messageday = this.getConfig().getString("messageday");
 		messagenight = this.getConfig().getString("messagenight");
 		messagekeepnight = this.getConfig().getString("messagekeepnight");
@@ -48,11 +45,70 @@ public class NKNC extends JavaPlugin {
         
 		if (this.getServer().getPluginManager().getPlugin("DeathDropsAPI").isEnabled()) {
 			Bukkit.getConsoleSender().sendMessage("§eHooking with DeathDropsAPI");
-			runnable = new DeathDropsAPIHook();
-			this.getServer().getPluginManager().registerEvents(new DeathDropsAPIEvent(), this);
+			runnable = new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					for (String b : world) {
+						
+						World e = Bukkit.getWorld(b);
+						if (isNight && e.getTime() >= 0L && e.getTime() < 13700L) {
+							
+							isKeep = true;
+							isNight = false;
+						}
+						else if (!isNight && e.getTime() >= 13700L) {
+							
+							if (Math.random() <= chance) {
+								isKeep = false;
+								getServer().getConsoleSender().sendMessage(messagenight.replaceAll("&", "§"));
+							} else {
+								getServer().getConsoleSender().sendMessage(messagekeepnight.replaceAll("&", "§"));
+							}
+							
+							isNight = true;
+						}
+					}
+				}
+				
+			};
+			this.getServer().getPluginManager().registerEvents(new Listener( ) {
+				@EventHandler(ignoreCancelled=true)
+				public void onDrop(PlayerDeathDropEvent e) {
+					if (isKeep) {
+						e.setCancelled(true);
+					}
+				}
+			}, this);
 		}
 		else {
-			runnable = new Default();
+			runnable = new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					for (String b : world) {
+						World e = Bukkit.getWorld(b);
+						if (isNight && e.getTime() >= 0L && e.getTime() < 13700L) {
+							
+							e.setGameRuleValue("keepinventory", "true");
+							getServer().getConsoleSender().sendMessage(messageday.replaceAll("&", "§"));
+							isNight = false;
+						}
+						else if (!isNight && e.getTime() >= 13700L) {
+							
+							if (Math.random() <= chance) {
+								e.setGameRuleValue("keepinventory", "false");
+								getServer().getConsoleSender().sendMessage(messagenight.replaceAll("&", "§"));
+							} else {
+								getServer().getConsoleSender().sendMessage(messagekeepnight.replaceAll("&", "§"));
+							}
+							
+							isNight = true;
+						}
+					}
+				}
+				
+			};
 		}
 		
 		runnable.runTaskTimer(this, 20L, 20L);
@@ -66,11 +122,7 @@ public class NKNC extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command arg1, String cmd, String[] arg) {
 		
-		this.world.clear();
-		for (String e : this.getConfig().getStringList("world")) {
-			world.add(this.getServer().getWorld(e));
-		}
-		
+		world = this.getConfig().getStringList("world");
 		messageday = this.getConfig().getString("messageday");
 		messagenight = this.getConfig().getString("messagenight");
 		messagekeepnight = this.getConfig().getString("messagekeepnight");
