@@ -47,6 +47,7 @@ public class NKNC extends JavaPlugin {
         }
         
 		if (this.getServer().getPluginManager().getPlugin("DeathDropsAPI").isEnabled()) {
+			Bukkit.getConsoleSender().sendMessage("§eHooking with DeathDropsAPI");
 			runnable = new DeathDropsAPIHook();
 			this.getServer().getPluginManager().registerEvents(new DeathDropsAPIEvent(), this);
 		}
@@ -55,6 +56,7 @@ public class NKNC extends JavaPlugin {
 		}
 		
 		runnable.runTaskTimer(this, 20L, 20L);
+		Bukkit.getConsoleSender().sendMessage("§aNonKeepNightChance Enabled");
 	}
 	
 	public void onDisable() {
