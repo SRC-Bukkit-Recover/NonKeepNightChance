@@ -1,8 +1,7 @@
 name: NonKeepNightChance
-author: Claus (original dev of WorldTimeRule), HSGamer (Re-coder)
+author: HSGamer
 version: 1.0
-depend: [MagicTitles]
-main: com.gmail.themasterclaus.WTR.main
+main: me.HSGamer.NKNC.NKNC
 commands:
  nonkeepnightchance:
   usage: /<command>

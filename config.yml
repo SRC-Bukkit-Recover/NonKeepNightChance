@@ -1,13 +1,6 @@
-world: world
+world:
+- world
 messagenight: '&f&l[&e&lĐêm Trăng Tròn&f&l] &bChết có mất đồ, hãy cẩn thận!'
 messageday: '&f&l[&e&lBan ngày&f&l] &bChết không mất đồ.'
 messagekeepnight: '&f&l[&e&lĐêm Trăng Non&f&l] &bChết không mất đồ.'
-titlekeepday: '&b&lTrời Đã Sáng'
-subtitlekeepday: '&eChết Không Mất Đồ'
-titlekeepnight: '&b&lĐêm Trăng Non'
-subtitlekeepnight: '&eChết Không Mất Đồ'
-titlenonkeep: '&c&lĐêm Trăng Tròn'
-subtitlenonkeep: '&dChết Mất Đồ!! Cẩn Thận!!'
-keepactionbar: '&7&lCHẾT KHÔNG MẤT ĐỒ'
-nonkeepactionbar: '&c&lCHẾT MẤT ĐỒ'
 chance: 0.5 # From 0.0 to 1.0. i.e: 0.5=50%
