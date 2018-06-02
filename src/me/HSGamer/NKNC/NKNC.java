@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -56,14 +57,18 @@ public class NKNC extends JavaPlugin {
 							
 							isKeep = true;
 							isNight = false;
+							for (Player c : e.getPlayers()) { c.sendMessage(messageday.replaceAll("&", "§")); }
+							Bukkit.getConsoleSender().sendMessage(messageday.replaceAll("&", "§"));
 						}
 						else if (!isNight && e.getTime() >= 13700L) {
 							
 							if (Math.random() <= chance) {
 								isKeep = false;
-								getServer().getConsoleSender().sendMessage(messagenight.replaceAll("&", "§"));
+								for (Player c : e.getPlayers()) { c.sendMessage(messagenight.replaceAll("&", "§")); }
+								Bukkit.getConsoleSender().sendMessage(messagenight.replaceAll("&", "§"));
 							} else {
-								getServer().getConsoleSender().sendMessage(messagekeepnight.replaceAll("&", "§"));
+								for (Player c : e.getPlayers()) { c.sendMessage(messagekeepnight.replaceAll("&", "§")); }
+								Bukkit.getConsoleSender().sendMessage(messagekeepnight.replaceAll("&", "§"));
 							}
 							
 							isNight = true;
@@ -91,16 +96,19 @@ public class NKNC extends JavaPlugin {
 						if (isNight && e.getTime() >= 0L && e.getTime() < 13700L) {
 							
 							e.setGameRuleValue("keepinventory", "true");
-							getServer().getConsoleSender().sendMessage(messageday.replaceAll("&", "§"));
+							for (Player c : e.getPlayers()) { c.sendMessage(messageday.replaceAll("&", "§")); }
+							Bukkit.getConsoleSender().sendMessage(messageday.replaceAll("&", "§"));
 							isNight = false;
 						}
 						else if (!isNight && e.getTime() >= 13700L) {
 							
 							if (Math.random() <= chance) {
 								e.setGameRuleValue("keepinventory", "false");
-								getServer().getConsoleSender().sendMessage(messagenight.replaceAll("&", "§"));
+								for (Player c : e.getPlayers()) { c.sendMessage(messagenight.replaceAll("&", "§")); }
+								Bukkit.getConsoleSender().sendMessage(messagenight.replaceAll("&", "§"));
 							} else {
-								getServer().getConsoleSender().sendMessage(messagekeepnight.replaceAll("&", "§"));
+								for (Player c : e.getPlayers()) { c.sendMessage(messagekeepnight.replaceAll("&", "§")); }
+								Bukkit.getConsoleSender().sendMessage(messagekeepnight.replaceAll("&", "§"));
 							}
 							
 							isNight = true;
