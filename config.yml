@@ -1,6 +1,6 @@
 world:
 - world
-messagenight: '&f&l[&e&lĐêm Trăng Tròn&f&l] &bChết có mất đồ, hãy cẩn thận!'
-messageday: '&f&l[&e&lBan ngày&f&l] &bChết không mất đồ.'
-messagekeepnight: '&f&l[&e&lĐêm Trăng Non&f&l] &bChết không mất đồ.'
+messagenight: '&f&l[&c&lBloody Night&f&l] &bDrop items on death, Be Careful!'
+messageday: '&f&l[&e&lSunrise&f&l] &bKeep items on death.'
+messagekeepnight: '&f&l[&f&lNight&f&l] &bKeep items on death.'
 chance: 0.5 # From 0.0 to 1.0. i.e: 0.5=50%
