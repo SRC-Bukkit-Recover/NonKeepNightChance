@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,20 +12,35 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.md_5.bungee.api.ChatColor;
+import cf.magsoo.magictitles.AppearingTitle;
+import cf.magsoo.magictitles.MagicTitle;
+import cf.magsoo.magictitles.NormalTitle;
+import cf.magsoo.magictitles.TitleSlot;
 
 public class NKNC extends JavaPlugin {
 
 	private static HashMap<String, Boolean> nightWorld = new HashMap<String, Boolean>();
 	private static HashMap<String, Boolean> keepWorld = new HashMap<String, Boolean>();
+	
 	public BukkitRunnable runnable;
+	
 	public String messagenight;
 	public String messageday;
 	public String messagekeepnight;
+	
 	public double chance;
+	
+	public NormalTitle day;
+	public NormalTitle actionbarday;
+	public MagicTitle night;
+	public NormalTitle actionbarnight;
+	public AppearingTitle keepnight;
+	public NormalTitle actionbarkeepnight;
 	
 	public void onEnable() {
 		
+		//Load default config.yml
+		this.getConfig().options().copyHeader(true);
 		saveDefaultConfig();
 		
 		// Check and register worlds;
@@ -44,9 +60,20 @@ public class NKNC extends JavaPlugin {
 		}
 		
 		// Get information from the configuration file
-		messageday = this.getConfig().getString("messageday");
-		messagenight = this.getConfig().getString("messagenight");
-		messagekeepnight = this.getConfig().getString("messagekeepnight");
+		// - day
+		messageday = this.getConfig().getString("day.message");
+		day = new NormalTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("day.title.title").replaceAll("&", "§"), this.getConfig().getString("day.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
+		actionbarday = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("day.actionbar").replaceAll("&", "§"));
+		// - night
+		messagenight = this.getConfig().getString("night.message");
+		night = new MagicTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("night.title.title").replaceAll("&", "§"), this.getConfig().getString("night.title.subtitle").replaceAll("&", "§"), 20, 40, 20, 40);
+		actionbarnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("night.actionbar").replaceAll("&", "§"));
+		// - keepnight
+		messagekeepnight = this.getConfig().getString("keepnight.message");
+		keepnight = new AppearingTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("keepnight.title.title").replaceAll("&", "§"), this.getConfig().getString("keepnight.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
+		actionbarkeepnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("keepnight.actionbar").replaceAll("&", "§"));
+		
+		// Get "chance" value
 		chance = this.getConfig().getDouble("chance");
 		
 		// Check if "chance" value is invalid
@@ -72,7 +99,11 @@ public class NKNC extends JavaPlugin {
 						e.setGameRuleValue("keepinventory", "true");
 						keepWorld.put(b, true);
 						nightWorld.put(b, false);
-						for (Player c : e.getPlayers()) { c.sendMessage(messageday.replaceAll("&", "§")); }
+						for (Player c : e.getPlayers()) {
+							c.sendMessage(messageday.replaceAll("&", "§"));
+							day.send(c);
+							actionbarday.send(c);
+						}
 						Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messageday.replaceAll("&", "§"));
 					}
 					else if (!isNightWorld(b) && e.getTime() >= 13700L) {
@@ -81,10 +112,18 @@ public class NKNC extends JavaPlugin {
 							
 							e.setGameRuleValue("keepinventory", "false");
 							keepWorld.put(b, false);
-							for (Player c : e.getPlayers()) { c.sendMessage(messagenight.replaceAll("&", "§")); }
+							for (Player c : e.getPlayers()) {
+								c.sendMessage(messagenight.replaceAll("&", "§"));
+								night.send(c);
+								actionbarnight.send(c);
+							}
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messagenight.replaceAll("&", "§"));
 						} else {
-							for (Player c : e.getPlayers()) { c.sendMessage(messagekeepnight.replaceAll("&", "§")); }
+							for (Player c : e.getPlayers()) {
+								c.sendMessage(messagekeepnight.replaceAll("&", "§"));
+								keepnight.send(c);
+								actionbarkeepnight.send(c);
+							}
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messagekeepnight.replaceAll("&", "§"));
 						}
 						
@@ -115,6 +154,9 @@ public class NKNC extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, org.bukkit.command.Command arg1, String cmd, String[] arg) {
 		
+		this.getConfig().options().copyHeader(true);
+		reloadConfig();
+		
 		nightWorld.clear();
 		keepWorld.clear();
 		List<String> worldstring = this.getConfig().getStringList("world");
@@ -132,9 +174,15 @@ public class NKNC extends JavaPlugin {
 			}
 		}
 		
-		messageday = this.getConfig().getString("messageday");
-		messagenight = this.getConfig().getString("messagenight");
-		messagekeepnight = this.getConfig().getString("messagekeepnight");
+		messageday = this.getConfig().getString("day.message");
+		day = new NormalTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("day.title.title").replaceAll("&", "§"), this.getConfig().getString("day.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
+		actionbarday = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("day.actionbar").replaceAll("&", "§"));
+		messagenight = this.getConfig().getString("night.message");
+		night = new MagicTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("night.title.title").replaceAll("&", "§"), this.getConfig().getString("night.title.subtitle").replaceAll("&", "§"), 20, 40, 20, 40);
+		actionbarnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("night.actionbar").replaceAll("&", "§"));
+		messagekeepnight = this.getConfig().getString("keepnight.message");
+		keepnight = new AppearingTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("keepnight.title.title").replaceAll("&", "§"), this.getConfig().getString("keepnight.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
+		actionbarkeepnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("keepnight.actionbar").replaceAll("&", "§"));
 		chance = this.getConfig().getDouble("chance");
 		
         if (this.chance > 1.0 || this.chance < 0.0) {
