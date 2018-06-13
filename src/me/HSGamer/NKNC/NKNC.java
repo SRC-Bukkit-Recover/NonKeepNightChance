@@ -199,10 +199,16 @@ public class NKNC extends JavaPlugin {
 	}
 	
 	public static boolean isNightWorld(String world) {
+		if (nightWorld.get(world) == null) {
+			return false;
+		}
 		return nightWorld.get(world);
 	}
 	
 	public static boolean isKeepWorld(String world) {
+		if (keepWorld.get(world) == null) {
+			return false;
+		}
 		return keepWorld.get(world);
 	}
 }
