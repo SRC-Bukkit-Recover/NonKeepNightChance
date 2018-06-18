@@ -120,6 +120,7 @@ public class NKNC extends JavaPlugin {
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messagenight.replaceAll("&", "§"));
 						} else {
 							for (Player c : e.getPlayers()) {
+								e.setGameRuleValue("keepinventory", "true");
 								c.sendMessage(messagekeepnight.replaceAll("&", "§"));
 								keepnight.send(c);
 								actionbarkeepnight.send(c);
@@ -199,14 +200,14 @@ public class NKNC extends JavaPlugin {
 	}
 	
 	public static boolean isNightWorld(String world) {
-		if (nightWorld.get(world) == null) {
+		if (!nightWorld.containsKey(world)) {
 			return false;
 		}
 		return nightWorld.get(world);
 	}
 	
 	public static boolean isKeepWorld(String world) {
-		if (keepWorld.get(world) == null) {
+		if (!keepWorld.containsKey(world)) {
 			return false;
 		}
 		return keepWorld.get(world);
