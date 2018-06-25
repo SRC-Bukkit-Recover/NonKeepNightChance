@@ -6,7 +6,7 @@ import net.minefs.DeathDropsAPI.PlayerDeathDropEvent;
 
 public class Listeners implements Listener {
 	
-	@EventHandler(ignoreCancelled=true)
+	@EventHandler
 	public void onDrop(PlayerDeathDropEvent e) {
 		if (NKNC.isKeepWorld(e.getPlayer().getWorld().getName()) || e.getPlayer().getWorld().getGameRuleValue("keepinventory") == "true") {
 			e.setCancelled(true);
