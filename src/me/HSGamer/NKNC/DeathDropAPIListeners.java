@@ -4,7 +4,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import net.minefs.DeathDropsAPI.PlayerDeathDropEvent;
 
-public class Listeners implements Listener {
+public class DeathDropAPIListeners implements Listener {
 	
 	@EventHandler
 	public void onDrop(PlayerDeathDropEvent e) {
