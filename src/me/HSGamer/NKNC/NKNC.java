@@ -136,7 +136,7 @@ public class NKNC extends JavaPlugin {
 		};
 		
 		// Check if DeathDropsAPI is available
-		if (this.getServer().getPluginManager().getPlugin("DeathDropsAPI").isEnabled()) {
+		if (this.getServer().getPluginManager().getPlugin("DeathDropsAPI") != null && this.getServer().getPluginManager().getPlugin("DeathDropsAPI").isEnabled()) {
 			Bukkit.getConsoleSender().sendMessage("§eHooking with DeathDropsAPI");
 			this.getServer().getPluginManager().registerEvents(new DeathDropAPIListeners(), this);
 		}
