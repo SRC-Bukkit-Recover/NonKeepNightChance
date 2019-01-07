@@ -2,8 +2,7 @@ name: NonKeepNightChance
 author: HSGamer
 version: 2.1
 main: me.HSGamer.NKNC.NKNC
-depend: [MagicTitles]
-softdepend: [DeathDropsAPI]
+depend: [BountifulAPI]
 commands:
  nonkeepnightchance:
   usage: /<command>
