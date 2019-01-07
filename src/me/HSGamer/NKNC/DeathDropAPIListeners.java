@@ -8,7 +8,7 @@ public class DeathDropAPIListeners implements Listener {
 	
 	@EventHandler
 	public void onDrop(PlayerDeathDropEvent e) {
-		if (NKNC.isKeepWorld(e.getPlayer().getWorld().getName()) || e.getPlayer().getWorld().getGameRuleValue("keepinventory") == "true") {
+		if (NKNC.isKeepWorld(e.getPlayer().getWorld().getName()) || e.getPlayer().getWorld().getGameRuleValue("keepInventory") == "true") {
 			e.setCancelled(true);
 		}
 	}

@@ -96,7 +96,7 @@ public class NKNC extends JavaPlugin {
 					World e = Bukkit.getWorld(b);
 					if (isNightWorld(b) && e.getTime() >= 0L && e.getTime() < 13700L) {
 						
-						e.setGameRuleValue("keepinventory", "true");
+						e.setGameRuleValue("keepInventory", "true");
 						keepWorld.put(b, true);
 						nightWorld.put(b, false);
 						for (Player c : e.getPlayers()) {
@@ -110,7 +110,7 @@ public class NKNC extends JavaPlugin {
 						
 						if (Math.random() <= chance) {
 							
-							e.setGameRuleValue("keepinventory", "false");
+							e.setGameRuleValue("keepInventory", "false");
 							keepWorld.put(b, false);
 							for (Player c : e.getPlayers()) {
 								c.sendMessage(messagenight.replaceAll("&", "§"));
@@ -120,7 +120,7 @@ public class NKNC extends JavaPlugin {
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messagenight.replaceAll("&", "§"));
 						} else {
 							for (Player c : e.getPlayers()) {
-								e.setGameRuleValue("keepinventory", "true");
+								e.setGameRuleValue("keepInventory", "true");
 								c.sendMessage(messagekeepnight.replaceAll("&", "§"));
 								keepnight.send(c);
 								actionbarkeepnight.send(c);
