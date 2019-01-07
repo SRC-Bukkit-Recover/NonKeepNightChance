@@ -1,6 +1,6 @@
 name: NonKeepNightChance
 author: HSGamer
-version: 2.1
+version: 2.2
 main: me.HSGamer.NKNC.NKNC
 depend: [MagicTitles]
 softdepend: [DeathDropsAPI]
