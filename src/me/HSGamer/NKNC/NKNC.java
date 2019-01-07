@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,10 +13,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import cf.magsoo.magictitles.AppearingTitle;
-import cf.magsoo.magictitles.MagicTitle;
-import cf.magsoo.magictitles.NormalTitle;
-import cf.magsoo.magictitles.TitleSlot;
+import com.connorlinfoot.bountifulapi.BountifulAPI;
 
 public class NKNC extends JavaPlugin {
 
@@ -30,12 +28,15 @@ public class NKNC extends JavaPlugin {
 	
 	public double chance;
 	
-	public NormalTitle day;
-	public NormalTitle actionbarday;
-	public MagicTitle night;
-	public NormalTitle actionbarnight;
-	public AppearingTitle keepnight;
-	public NormalTitle actionbarkeepnight;
+	public String titleDay;
+	public String subtitleDay;
+	public String actionbarDay;
+	public String titleNight;
+	public String subtitleNight;
+	public String actionbarNight;
+	public String titleKeepNight;
+	public String subtitleKeepNight;
+	public String actionbarKeepNight;
 	
 	public void onEnable() {
 		
@@ -62,16 +63,19 @@ public class NKNC extends JavaPlugin {
 		// Get information from the configuration file
 		// - day
 		messageday = this.getConfig().getString("day.message");
-		day = new NormalTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("day.title.title").replaceAll("&", "§"), this.getConfig().getString("day.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
-		actionbarday = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("day.actionbar").replaceAll("&", "§"));
+		titleDay = this.getConfig().getString("day.title.title").replaceAll("&", "§");
+		subtitleDay = this.getConfig().getString("day.title.subtitle").replaceAll("&", "§");
+		actionbarDay = this.getConfig().getString("day.actionbar").replaceAll("&", "§");
 		// - night
 		messagenight = this.getConfig().getString("night.message");
-		night = new MagicTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("night.title.title").replaceAll("&", "§"), this.getConfig().getString("night.title.subtitle").replaceAll("&", "§"), 20, 40, 20, 40);
-		actionbarnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("night.actionbar").replaceAll("&", "§"));
+		titleNight = this.getConfig().getString("night.title.title").replaceAll("&", "§");
+		subtitleNight = this.getConfig().getString("night.title.subtitle").replaceAll("&", "§");
+		actionbarNight = this.getConfig().getString("night.actionbar").replaceAll("&", "§");
 		// - keepnight
 		messagekeepnight = this.getConfig().getString("keepnight.message");
-		keepnight = new AppearingTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("keepnight.title.title").replaceAll("&", "§"), this.getConfig().getString("keepnight.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
-		actionbarkeepnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("keepnight.actionbar").replaceAll("&", "§"));
+		titleKeepNight = this.getConfig().getString("keepnight.title.title").replaceAll("&", "§");
+		subtitleKeepNight = this.getConfig().getString("keepnight.title.subtitle").replaceAll("&", "§");
+		actionbarKeepNight = this.getConfig().getString("keepnight.actionbar").replaceAll("&", "§");
 		
 		// Get "chance" value
 		chance = this.getConfig().getDouble("chance");
@@ -96,13 +100,13 @@ public class NKNC extends JavaPlugin {
 					World e = Bukkit.getWorld(b);
 					if (isNightWorld(b) && e.getTime() >= 0L && e.getTime() < 13700L) {
 						
-						e.setGameRuleValue("keepinventory", "true");
+						e.setGameRule(GameRule.KEEP_INVENTORY, true);
 						keepWorld.put(b, true);
 						nightWorld.put(b, false);
 						for (Player c : e.getPlayers()) {
 							c.sendMessage(messageday.replaceAll("&", "§"));
-							day.send(c);
-							actionbarday.send(c);
+							BountifulAPI.sendTitle(c, 20, 40, 20, titleDay, subtitleDay);
+							BountifulAPI.sendActionBar(c, actionbarDay);
 						}
 						Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messageday.replaceAll("&", "§"));
 					}
@@ -110,20 +114,20 @@ public class NKNC extends JavaPlugin {
 						
 						if (Math.random() <= chance) {
 							
-							e.setGameRuleValue("keepinventory", "false");
+							e.setGameRule(GameRule.KEEP_INVENTORY, false);
 							keepWorld.put(b, false);
 							for (Player c : e.getPlayers()) {
 								c.sendMessage(messagenight.replaceAll("&", "§"));
-								night.send(c);
-								actionbarnight.send(c);
+								BountifulAPI.sendTitle(c, 20, 40, 20, titleNight, subtitleNight);
+								BountifulAPI.sendActionBar(c, actionbarNight);
 							}
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messagenight.replaceAll("&", "§"));
 						} else {
 							for (Player c : e.getPlayers()) {
-								e.setGameRuleValue("keepinventory", "true");
+								e.setGameRule(GameRule.KEEP_INVENTORY, true);
 								c.sendMessage(messagekeepnight.replaceAll("&", "§"));
-								keepnight.send(c);
-								actionbarkeepnight.send(c);
+								BountifulAPI.sendTitle(c, 20, 40, 20, titleKeepNight, subtitleKeepNight);
+								BountifulAPI.sendActionBar(c, actionbarKeepNight);
 							}
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "[" + b + "] " + messagekeepnight.replaceAll("&", "§"));
 						}
@@ -134,12 +138,6 @@ public class NKNC extends JavaPlugin {
 			}
 			
 		};
-		
-		// Check if DeathDropsAPI is available
-		if (this.getServer().getPluginManager().getPlugin("DeathDropsAPI").isEnabled()) {
-			Bukkit.getConsoleSender().sendMessage("§eHooking with DeathDropsAPI");
-			this.getServer().getPluginManager().registerEvents(new DeathDropAPIListeners(), this);
-		}
 		
 		// Run Runnable
 		runnable.runTaskTimer(this, 20L, 20L);
@@ -176,15 +174,17 @@ public class NKNC extends JavaPlugin {
 		}
 		
 		messageday = this.getConfig().getString("day.message");
-		day = new NormalTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("day.title.title").replaceAll("&", "§"), this.getConfig().getString("day.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
-		actionbarday = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("day.actionbar").replaceAll("&", "§"));
+		titleDay = this.getConfig().getString("day.title.title").replaceAll("&", "§");
+		subtitleDay = this.getConfig().getString("day.title.subtitle").replaceAll("&", "§");
+		actionbarDay = this.getConfig().getString("day.actionbar").replaceAll("&", "§");
 		messagenight = this.getConfig().getString("night.message");
-		night = new MagicTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("night.title.title").replaceAll("&", "§"), this.getConfig().getString("night.title.subtitle").replaceAll("&", "§"), 20, 40, 20, 40);
-		actionbarnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("night.actionbar").replaceAll("&", "§"));
+		titleNight = this.getConfig().getString("night.title.title").replaceAll("&", "§");
+		subtitleNight = this.getConfig().getString("night.title.subtitle").replaceAll("&", "§");
+		actionbarNight = this.getConfig().getString("night.actionbar").replaceAll("&", "§");
 		messagekeepnight = this.getConfig().getString("keepnight.message");
-		keepnight = new AppearingTitle(TitleSlot.TITLE_SUBTITLE, this.getConfig().getString("keepnight.title.title").replaceAll("&", "§"), this.getConfig().getString("keepnight.title.subtitle").replaceAll("&", "§"), 20, 40, 20);
-		actionbarkeepnight = new NormalTitle(TitleSlot.ACTIONBAR, this.getConfig().getString("keepnight.actionbar").replaceAll("&", "§"));
-		chance = this.getConfig().getDouble("chance");
+		titleKeepNight = this.getConfig().getString("keepnight.title.title").replaceAll("&", "§");
+		subtitleKeepNight = this.getConfig().getString("keepnight.title.subtitle").replaceAll("&", "§");
+		actionbarKeepNight = this.getConfig().getString("keepnight.actionbar").replaceAll("&", "§");
 		
         if (this.chance > 1.0 || this.chance < 0.0) {
             sender.sendMessage("§cUnknown 'chance' value");
