@@ -1,6 +1,6 @@
 name: NonKeepNightChance
 author: HSGamer
-version: 2.1
+version: 3.0
 main: me.HSGamer.NKNC.NKNC
 depend: [BountifulAPI]
 commands:
